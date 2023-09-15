@@ -1,0 +1,3 @@
+#!/bin/bash
+
+(npx vite &) && (sleep 2 && npx ts-node ./server.tsx)
