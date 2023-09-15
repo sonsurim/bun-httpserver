@@ -1,15 +1,15 @@
-# React SSR with Bun
+# React SSR with Node + Vite
 
 ## Step 1
 
 ```bash
-bun install
+yarn
 ```
 
 ## Step 2
 
 ```bash
-bun start
+yarn start
 ```
 
 ## Step 3
