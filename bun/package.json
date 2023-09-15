@@ -2,6 +2,9 @@
   "name": "bun-ssr",
   "module": "index.ts",
   "type": "module",
+  "scripts": {
+    "start": "bun index.tsx --watch"
+  },
   "devDependencies": {
     "@types/react-dom": "^18.2.7",
     "bun-types": "latest"
