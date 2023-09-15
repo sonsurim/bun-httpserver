@@ -1,4 +1,4 @@
-# React SSR with Node + Vite
+# React SSR with Node
 
 ## Step 1
 
