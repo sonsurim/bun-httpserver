@@ -1,27 +1,21 @@
 import express from 'express';
-import { renderToStaticMarkup } from 'react-dom/server';
 import { PokemonResponse } from './types/PokemonResponse';
 import { PokemonsResponse } from './types/PokemonsResponse';
-import { Readable } from 'stream';
-
+import { renderToPipeableStream } from 'react-dom/server';
 import Pokemon from './components/Pokemon';
 import PokemonList from './components/PokemonList';
 
 const app = express();
 
-app.get('/pokemon', async (req, res) => {
+app.get('/pokemon', async (_, res) => {
   try {
     const response = await fetch('https://pokeapi.co/api/v2/pokemon');
     const { results } = (await response.json()) as PokemonsResponse;
 
-    const pokemonListHtml = renderToStaticMarkup(<PokemonList pokemon={results} />);
-
-    const stream = new Readable();
-    stream.push(pokemonListHtml);
-    stream.push(null);
+    const stream = await renderToPipeableStream(<PokemonList pokemon={results} />);
 
     res.set('Content-Type', 'text/html');
-    stream.pipe(res);
+    stream.pipe(res)
   } catch (error) {
     console.error(error);
     res.status(500).send('Internal Server Error');
@@ -43,13 +37,9 @@ app.get('/pokemon/:name', async (req, res) => {
       sprites: { front_default },
     } = (await response.json()) as PokemonResponse;
 
-    const pokemonHtml = renderToStaticMarkup(
+    const stream = await renderToPipeableStream(
       <Pokemon name={name} height={height} weight={weight} img={front_default} />
     );
-
-    const stream = new Readable();
-    stream.push(pokemonHtml);
-    stream.push(null);
 
     res.set('Content-Type', 'text/html');
     stream.pipe(res);
